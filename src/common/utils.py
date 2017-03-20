@@ -19,8 +19,8 @@ class Utils(object):
     @staticmethod
     def check_hashed_password(password, hashed_password):
         """
-        checks that the pass the user sent matches that of the database
-        the database pas is encrypted more that the user's password at this stage
+        checks that the pass the user_email sent matches that of the database
+        the database pas is encrypted more that the user_email's password at this stage
 
         :param password: sha512-hashed password
         :param hashed_password: PBKDF2_sha512 encrypted password

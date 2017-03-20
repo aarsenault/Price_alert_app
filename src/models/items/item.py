@@ -1,5 +1,4 @@
 import uuid
-
 import requests
 import re
 from bs4 import BeautifulSoup
@@ -13,9 +12,9 @@ class Item(object):
         self.name = name
         self.url = url
         store = Store.find_by_url(url)
-        tag_name = store.tag_name
-        query = store.query
-        self.price = self.load_price(tag_name, query)
+        self.tag_name = store.tag_name
+        self.query = store.query
+        self.price = None
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def __repr__(self):
@@ -25,26 +24,14 @@ class Item(object):
 
         # Get the page content from the stored url
         request = requests.get(self.url)
-
-        # DEBUG
-        # print("here is the content {}".format(request.content) )
-
         content = request.content
 
         # Initialize beautiful soup
         soup = BeautifulSoup(content, "html.parser")
 
         # find the element by tag_name, query
-        element = soup.find(tag_name, query)
+        element = soup.find(self.tag_name, self.query)
         element2 = soup.find("span", {"itemprop": "price", "class": "now-price"})
-
-
-        # # DEBUG
-        # print("here is the element 1 text: {} ".format(element))
-        # print("here is the element 2 text: {}".format(element2))
-
-
-
 
         string_price = element.text.strip()
 
@@ -52,14 +39,19 @@ class Item(object):
         pattern = re.compile("(\d+.\d+)")  # () gives a matching group
         match = pattern.search(string_price)
 
-        #finds the group from the regex and returns it
-        return match.group()
+        # groups are what are in the parenthesis
+        self.price = match.group()
+        return self.price
 
 
     def save_to_mongo(self):
         Database.insert(ItemConstants.COLLECTION, self.json())
         pass
 
+
+    @classmethod
+    def get_by_id(cls, item_id):
+        return Database.find_one(ItemConstants.COLLECTION, {"_id": item_id})
 
     def json(self):
         return{
@@ -70,7 +62,6 @@ class Item(object):
 
         }
 
-
-
-    # for AMAZON
-    # <span id="priceblock_ourprice" class="a-size-medium a-color-price">$1,798.00</span>
+    @classmethod
+    def get_by_id(cls, item_id):
+        return cls(**Database.find_one(ItemConstants.COLLECTION, {"_id": item_id}))

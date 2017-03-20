@@ -35,7 +35,7 @@ def login_user():
             return e.message
 
     # if invalid or GET method
-    return render_template("user/login.html")
+    return render_template("user_email/login.html")
 
 
 @user_blueprint.route('/register', methods=['GET', 'POST'])
@@ -57,7 +57,7 @@ def register_user():
             return e.message
 
             # if invalid or GET method
-    return render_template("user/register.html")
+    return render_template("user_email/register.html")
 
 
 @user_blueprint.route('/alerts')

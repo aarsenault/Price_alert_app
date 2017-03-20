@@ -24,7 +24,7 @@ class User(object):
         checks that the e-mail exists, and that the password
         associated to that email is correct.
 
-        :param email: the user's email
+        :param email: the user_email's email
         :param password: A sha512 hashed password
         :return: True if valid, False otherwise
         """
@@ -32,7 +32,7 @@ class User(object):
         user_data = Database.find_one("users", {"email": email})
         # Pass in pbkdf2_sha512
         if user_data is None:
-            # Tell the user that their e-mail doesn't exist
+            # Tell the user_email that their e-mail doesn't exist
             raise UserErrors.NoUser("User does not exist!")
 
         if not Utils.check_hashed_password(password, user_data['password']):
@@ -45,10 +45,10 @@ class User(object):
     @staticmethod
     def register_user(email, password):
         """
-        Method registeres a user using e-mail and pass.
+        Method registeres a user_email using e-mail and pass.
         the pass already comes hashed as sha512
 
-        :param email: user's email - might be invalid
+        :param email: user_email's email - might be invalid
         :param password: sha512 hased pass
         :return: True if successful registration, false otherwise (exceptions raised)
 
@@ -56,11 +56,11 @@ class User(object):
         user_data = Database.find_one("users", {"email": email})
 
         if user_data is not None:
-            # Tell user they're already registered
+            # Tell user_email they're already registered
             raise UserErrors.UserAlreadyRegistered("The E-mail you entered is already registered")
 
         if not Utils.email_is_valid(email):
-            # tell user that emai is not constructed properly
+            # tell user_email that emai is not constructed properly
             raise UserErrors.InvalidEmailError("E-mail does not have a valid format")
 
 
