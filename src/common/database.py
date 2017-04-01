@@ -20,9 +20,14 @@ class Database(object):
         Database.DATABASE[collection].insert(data)
 
     @staticmethod
+    def insert_or_modify(collection, data):
+        Database.DATABASE[collection].save(data)
+
+    @staticmethod
     def find(collection, query):
         return Database.DATABASE[collection].find(query)
 
     @staticmethod
     def find_one(collection, query):
         return Database.DATABASE[collection].find_one(query)
+

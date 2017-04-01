@@ -9,4 +9,4 @@ FROM = "Mailgun Sandbox <postmaster@sandboxe76088c859884fbf9f82a5fe240151dd.mail
 COLLECTION = "alerts"
 
 # src file constants
-AlERT_TIMOUT = 10
+ALERT_TIMEOUT = 0.20
