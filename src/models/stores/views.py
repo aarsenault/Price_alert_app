@@ -9,3 +9,6 @@ def store_page():
     pass
 
 
+@store_blueprint.route('/')
+def index():
+    return "this is the store index"

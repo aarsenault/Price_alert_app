@@ -4,7 +4,7 @@ import re
 class Utils(object):
 
     @staticmethod
-    def hash_password(password):
+    def encrypt_password(password):
 
         """
         Encrypts a password using pbkdf2_sha512

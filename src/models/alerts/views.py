@@ -12,6 +12,9 @@ def create_alert():
 def deactivate_alert(alert_id):
     pass
 
+@alert_blueprint.route('/')
+def index():
+    return "this is the alerts index"
 
 @alert_blueprint.route('/alert/<string:alert_id>')
 def get_alert_page(alert_id):

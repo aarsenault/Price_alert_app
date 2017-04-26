@@ -21,7 +21,7 @@ def login_user():
     if request.method == 'POST':
         # Check the login is valid
         email = request.form['email']
-        password = request.form['hashed']
+        password = request.form['password']
 
         try:
             # login valid
@@ -35,15 +35,17 @@ def login_user():
             return e.message
 
     # if invalid or GET method
-    return render_template("user_email/login.html")
+    return render_template("./users/login_user.jinja2")
 
 
 @user_blueprint.route('/register', methods=['GET', 'POST'])
 def register_user():
     if request.method == 'POST':
         # Check the login is valid
+
+        # ask A.J. if passing unhashed passwords is safe?
         email = request.form['email']
-        password = request.form['hashed']
+        password = request.form['password']
 
         try:
             # login valid
@@ -57,7 +59,18 @@ def register_user():
             return e.message
 
             # if invalid or GET method
-    return render_template("user_email/register.html")
+
+    else:
+        return render_template("./users/register_user.jinja2")
+
+
+
+@user_blueprint.route('/logout')
+def logout_user():
+    session['email'] = None
+    # No '.home' because home is the base version in the app.py
+    # if home was a method in this file would need .home
+    return redirect(url_for('home'))
 
 
 @user_blueprint.route('/alerts')
@@ -65,10 +78,8 @@ def user_alerts():
     return "This is the alerts page."
 
 
-@user_blueprint.route('/logout')
-def logout_user():
-    pass
-
 @user_blueprint.route('/check_alers/<string:user_id>')
 def check_user_alerts(user_id):
     pass
+
+

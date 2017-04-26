@@ -64,7 +64,7 @@ class User(object):
             raise UserErrors.InvalidEmailError("E-mail does not have a valid format")
 
 
-        User(email, Utils.hash_password(password)).save_to_db()
+        User(email, Utils.encrypt_password(password)).save_to_db()
 
         return True
 
