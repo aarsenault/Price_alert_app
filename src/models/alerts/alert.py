@@ -7,12 +7,14 @@ from src.models.items.item import Item
 
 
 class Alert(object):
-    def __init__(self, user_email, price_limit, item, last_checked=None, _id=None):
+    def __init__(self, user_email, price_limit, item, active=True, last_checked=None, _id=None):
         self.user_email = user_email
         self.price_limit = price_limit
         self.item = Item.get_by_id(item)
         self.last_checked = datetime.datetime.utcnow() if last_checked is None else last_checked
         self._id = uuid.uuid4().hex if _id is None else _id
+        self.active = active
+
 
     def __repr__(self):
         return "<Alert for {} on item {} with price {}>".format(self.user_email,
@@ -56,7 +58,8 @@ class Alert(object):
             "price_limit": self.price_limit,
             "last_checked": self.last_checked,
             "user_email": self.user_email,
-            "item": self.item._id
+            "item": self.item._id,
+            "active": self.active
         }
 
     def load_item_price(self):
@@ -66,6 +69,7 @@ class Alert(object):
         self.last_checked = datetime.datetime.utcnow()
         # save new price to mongo
         self.save_to_mongo()
+        self.item.save_to_mongo()
 
         return self.item.price
 
@@ -73,3 +77,25 @@ class Alert(object):
         # - NOTE: might be self.item.price()?
         if self.item.price < self.price_limit:
             self.send()
+
+    @classmethod
+    def find_by_user_email(cls, user_email):
+        return [cls(**elem) for elem in Database.find(AlertConstants.COLLECTION,
+                                                      {"user_email": user_email})]
+
+    @classmethod
+    def find_by_id(cls, alert_id):
+        return cls(**Database.find_one(AlertConstants.COLLECTION,
+                                                      {"_id": alert_id}))
+
+    def deactivate(self):
+        self.active = False
+        self.save_to_mongo()
+
+    def activate(self):
+        self.active = True
+        self.save_to_mongo()
+
+
+
+

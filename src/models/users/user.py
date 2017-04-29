@@ -3,6 +3,8 @@ import uuid
 from src.common.database import Database
 from src.common.utils import Utils
 import src.models.users.errors as UserErrors
+from src.models.alerts.alert import Alert
+import src.models.users.constants as UserConstants
 
 
 class User(object):
@@ -53,7 +55,7 @@ class User(object):
         :return: True if successful registration, false otherwise (exceptions raised)
 
         """
-        user_data = Database.find_one("users", {"email": email})
+        user_data = Database.find_one(UserConstants.COLLECTION, {"email": email})
 
         if user_data is not None:
             # Tell user_email they're already registered
@@ -69,13 +71,22 @@ class User(object):
         return True
 
     def save_to_db(self):
-        # inserts the Json data into the users collection of the db
+        # inserts the Json data into the users COLLECTION of the db
         Database.insert("users", self.json())
 
     def json(self):
         return{
 
-            "id": self._id,
+            "_id": self._id,
             "email": self.email,
             "password": self.password
         }
+
+
+    @classmethod
+    def find_by_email(cls, email):
+        return cls(**Database.find_one(UserConstants.COLLECTION, {"email": email}))
+
+
+    def get_alerts(self):
+        return Alert.find_by_user_email(self.email)

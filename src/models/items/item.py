@@ -14,7 +14,7 @@ class Item(object):
         store = Store.find_by_url(url)
         self.tag_name = store.tag_name
         self.query = store.query
-        self.price = price
+        self.price = None if price is None else price
         self._id = uuid.uuid4().hex if _id is None else _id
 
     def __repr__(self):
@@ -46,12 +46,13 @@ class Item(object):
         return {
             "name": self.name,
             "url": self.url,
-            "_id": self._id
+            "_id": self._id,
+            "price": self.price
         }
 
     def save_to_mongo(self):
-        Database.insert(ItemConstants.COLLECTION, self.json())
-        pass
+        Database.insert_or_modify(ItemConstants.COLLECTION, self.json())
+
 
     # @classmethod
     # def get_by_id(cls, item_id):

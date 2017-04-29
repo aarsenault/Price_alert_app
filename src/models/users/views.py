@@ -11,6 +11,8 @@ from flask import url_for
 from werkzeug.utils import redirect
 
 import src.models.users.errors as UserErrors
+import src.models.users.decorators as user_decorators
+
 from src.models.users.user import User
 
 user_blueprint = Blueprint('users', __name__)
@@ -65,6 +67,8 @@ def register_user():
 
 
 
+
+
 @user_blueprint.route('/logout')
 def logout_user():
     session['email'] = None
@@ -74,8 +78,11 @@ def logout_user():
 
 
 @user_blueprint.route('/alerts')
+@user_decorators.requires_login
 def user_alerts():
-    return "This is the alerts page."
+    user = User.find_by_email(session["email"])
+    alerts = user.get_alerts()
+    return render_template('./users/alerts_list.jinja2', alerts=alerts)
 
 
 @user_blueprint.route('/check_alers/<string:user_id>')
