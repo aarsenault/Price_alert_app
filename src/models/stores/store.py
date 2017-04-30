@@ -17,7 +17,7 @@ class Store(object):
 
         # i.e - "itemprop": "price"
         self.query = query
-        self.id = uuid.uuid4().hex if _id is None else _id
+        self._id = uuid.uuid4().hex if _id is None else _id
 
     def __repr__(self):
         return "<Store {}>".format(self.name)
@@ -27,7 +27,7 @@ class Store(object):
     def json(self):
         return{
 
-            "_id": self.id,
+            "_id": self._id,
             "name": self.name,
             "url_prefix": self.url_prefix,
             "tag_name": self.tag_name,
@@ -42,7 +42,7 @@ class Store(object):
 
 
     def save_to_mongo(self):
-        Database.insert(StoreConstants.COLLECTION, self.json())
+        Database.insert_or_modify(StoreConstants.COLLECTION, self.json())
 
 
     @classmethod
@@ -75,3 +75,13 @@ class Store(object):
 
             except:
                 raise StoreErrors.StoreNotFoundException("the URL Prefix used to find the store didn't return a match ")
+
+
+    @classmethod
+    def all(cls):
+        return [cls(**elem) for elem in Database.find(StoreConstants.COLLECTION, {})]
+
+
+    def delete(self):
+        Database.remove(StoreConstants.COLLECTION, {'_id': self._id})
+        return True

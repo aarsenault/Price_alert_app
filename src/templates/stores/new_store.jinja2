@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="page-header">
-        <h1> Edit Store </h1>
+        <h1> Create Store </h1>
     </div>
 
     <div class="form-size">
@@ -10,35 +10,34 @@
         <form method="post">
             <div class="form-group">
                 <label for="name"> Store Name </label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Store Name" value="{{ store.name }}">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Store Name">
 
             </div>
 
             <div class="form-group">
                 <label for="name"> url_prefix </label>
                 <input type="text" class="form-control" id="url_prefix" name="url_prefix" placeholder="http://www..."
-                       aria-describedby="storeURLPrefixHelp" value="{{ store.url_prefix }}">
+                       aria-describedby="storeURLPrefixHelp">
                 <span id="storeURLPrefixHelp" class="help-block"> The main url of this online store </span>
 
             </div>
 
             <div class="form-group">
                 <label for="name"> Tag Name </label>
-                <input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="span" value="{{ store.tag_name }}"
+                <input type="text" class="form-control" id="tag_name" name="tag_name" placeholder="span" value="span"
                        aria-describedby="storeTagNameHelp">
                 <span id="storeTagNameHelp" class="help-block"> HTML tag of the item containing the price (usually <code>span</code> </span>
             </div>
 
             <div class="form-group">
                 <label for="name"> Search Query </label>
-{#                 the pipe applies the tojson to the store.query#}
-                <input type="text" class="form-control" id="query" name="query" placeholder='{"id": "price-now"}' value='{{ store.query | tojson }}'
+                <input type="text" class="form-control" id="query" name="query" placeholder='{"id": "price-now"}' value='{"id": "price-now"}'
                        aria-describedby="storeQueryHelp">
                 <span id="storeQueryHelp" class="help-block"> What JSON query you need to find the specific tag with the price </span>
             </div>
 
 
-            <button type="submit" class="btn btn-warning"> Update </button>
+            <button type="submit" class="btn btn-default"> Create</button>
         </form>
 
 

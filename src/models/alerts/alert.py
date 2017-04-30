@@ -46,7 +46,8 @@ class Alert(object):
         return [cls(**elem) for elem in Database.find(AlertConstants.COLLECTION,
                                                       {
                                                           "last_checked":
-                                                              {"$lte": last_updated_limit}
+                                                              {"$lte": last_updated_limit},
+                                                          "active": True
                                                       })]
 
     def save_to_mongo(self):
@@ -96,6 +97,7 @@ class Alert(object):
         self.active = True
         self.save_to_mongo()
 
-
+    def delete(self):
+        Database.remove(AlertConstants.COLLECTION, {'_id': self._id})
 
 

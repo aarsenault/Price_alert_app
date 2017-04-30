@@ -15,7 +15,7 @@ def create_alert():
     if request.method == 'POST':
         name = request.form['name']
         url = request.form['url']
-        price_limit = request.form['price_limit']
+        price_limit = float(request.form['price_limit'])
 
 
         # need to first create the item before alert
@@ -47,6 +47,14 @@ def activate_alert(alert_id):
     Alert.find_by_id(alert_id).activate()
     # return redirect(url_for('users.user_alerts'))
     return redirect(url_for('.get_alert_page', alert_id=alert_id))
+
+
+@alert_blueprint.route('/remove/<string:alert_id>')
+@user_decorators.requires_login
+def delete_alert(alert_id):
+    Alert.find_by_id(alert_id).delete()
+    # return redirect(url_for('users.user_alerts'))
+    return redirect(url_for('users.user_alerts'))
 
 
 @alert_blueprint.route('/')
