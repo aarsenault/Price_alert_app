@@ -9,7 +9,7 @@ class Database(object):
     # 27017 is the default mongodb port
 
     # Mongolab already adds MONGOLAB_URI, so it's not necessary to do anything else.
-    URI = os.environ.get("MONGOLAB_URI")
+    URI = os.environ.get("MONGODB_URI")
     DATABASE = None
 
     @staticmethod
