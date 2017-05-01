@@ -34,5 +34,5 @@ class Utils(object):
     def email_is_valid(email):
         # TODO
         # might need to mod this regex
-        email_address_matcher = re.compile('^[\w-]+@([\w-]+\.)+[\w]+$')
+        email_address_matcher = re.compile('^([\w-]+([\.{1}])?[\w-]+)+@([\w-]+\.)+[\w]+$')
         return True if email_address_matcher.match(email) else False

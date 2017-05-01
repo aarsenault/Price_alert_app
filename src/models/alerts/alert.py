@@ -31,7 +31,9 @@ class Alert(object):
                 "from": AlertConstants.FROM,
                 "to": self.user_email,
                 "subject": "Price limit reached for {}".format(self.item.name),
-                "text": "The Price has changed to {}".format(self.item.price)
+                "text": "The Price has changed to {}. Visit this item at the following link: {}".format(self.item.price, self.item.url)
+                # TODO - need to hardcode in the alerts page for other's to change it, edit, or delete
+                # i.e 'www.website.com/alerts/{}'.format(alert._id)
             }
         )
 

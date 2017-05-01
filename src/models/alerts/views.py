@@ -57,10 +57,6 @@ def delete_alert(alert_id):
     return redirect(url_for('users.user_alerts'))
 
 
-@alert_blueprint.route('/')
-def index():
-    return "this is the alerts index"
-
 @alert_blueprint.route('/<string:alert_id>')
 @user_decorators.requires_login
 def get_alert_page(alert_id):
@@ -73,5 +69,24 @@ def get_alert_page(alert_id):
 def check_alert_price(alert_id):
     Alert.find_by_id(alert_id).load_item_price()
     return redirect(url_for('.get_alert_page', alert_id=alert_id))
+
+@alert_blueprint.route('/edit/<string:alert_id>', methods=['GET','POST'] )
+@user_decorators.requires_login
+def edit_alert(alert_id):
+
+    # get the alert
+    alert = Alert.find_by_id(alert_id)
+
+    # if edits are posted from form
+    if request.method == 'POST':
+        alert.price_limit = float(request.form['price_limit'])
+        alert.name = request.form['name']
+
+        alert.save_to_mongo()
+
+        return redirect(url_for( 'users.users_alerts' ) )
+    return render_template('alerts/edit_alert.jinja2', alert=alert)
+
+
 
 
