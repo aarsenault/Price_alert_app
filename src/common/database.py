@@ -1,3 +1,4 @@
+import os
 
 import pymongo
 
@@ -6,7 +7,9 @@ import pymongo
 class Database(object):
     # Universal Resource Identifyer
     # 27017 is the default mongodb port
-    URI = "mongodb://127.0.0.1:27017"
+
+    # Mongolab already adds MONGOLAB_URI, so it's not necessary to do anything else.
+    URI = os.environ.get("MONGOLAB_URI")
     DATABASE = None
 
     @staticmethod
