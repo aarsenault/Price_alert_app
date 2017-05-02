@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # TODO
 # not totally sure what this line means
-app.config.from_object('config')
+app.config.from_object('src.config')
 
 app.secret_key = '123'
 
